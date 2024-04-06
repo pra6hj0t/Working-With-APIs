@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,8 +20,10 @@ import java.lang.StringBuilder
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://dummyjson.com/")
@@ -35,14 +39,10 @@ class MainActivity : AppCompatActivity() {
                 val responseBody = p1.body()
                 val productList = responseBody?.products!!
 
-                val collectDataInSB = StringBuilder()
+                var myadapter = MyAdapter(this@MainActivity,productList)
+                recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                recyclerView.adapter = myadapter
 
-                for(myData in productList){
-                    collectDataInSB.append(myData.title + "\n")
-                }
-
-                val tv = findViewById<TextView>(R.id.textView)
-                tv.text = collectDataInSB
 
             }
 
